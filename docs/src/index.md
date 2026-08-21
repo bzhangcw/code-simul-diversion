@@ -54,3 +54,8 @@ Follow the workflow in order:
 1. [Fit and check the regression models](simulation_regression.md).
 2. [Run the policy simulation](simulation_run.md).
 3. [Collect statistics and generate plots](simulation_results.md).
+
+## Optional steps
+
+1. [Prepare the dataset from raw data](data_preparation.md).
+2. [Fit the regression from scratch](regression_without_sirakaya.md).

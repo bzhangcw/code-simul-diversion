@@ -40,7 +40,8 @@ nav:
       - "Step 2: Simulation": simulation_run.md
       - "Step 3: Statistics and plots": simulation_results.md
   - Optional steps:
-      - "Regression without Sirakaya estimates": regression_without_sirakaya.md
+      - "Prepare the dataset from raw data": data_preparation.md
+      - "Regression from scratch": regression_without_sirakaya.md
 
 markdown_extensions:
   - admonition
