@@ -1,0 +1,1237 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Regression, simulation, and analysis workflow for the Python discrete-event simulator.">
+      
+      
+      
+      
+        <link rel="prev" href="../simulation_regression/">
+      
+      
+        <link rel="next" href="../simulation_results/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Step 2: Simulation - Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#step-2-run-the-policy-simulation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Code for &#34;The Dynamic and Endogenous Behavior of Re-Offense Risk...&#34;" class="md-header__button md-logo" aria-label="Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Step 2: Simulation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Code for &#34;The Dynamic and Endogenous Behavior of Re-Offense Risk...&#34;" class="md-nav__button md-logo" aria-label="Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Workflow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation_regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 1: Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 2: Simulation
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 2: Simulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-start-in-the-simulation-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Start in the simulation directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-python-script-to-run-simulation-run_policypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The python script to run simulation: run_policy.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The python script to run simulation: run_policy.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-smoke-test-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example smoke-test output
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-3-using-the-template-zsh-script-for-batch-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (Optional) 3. Using the template zsh script for batch run
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="(Optional) 3. Using the template zsh script for batch run">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction-to-the-template-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction to the template script
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#starting-the-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Starting the jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-the-job-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring the job status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#understand-the-result-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understand the result layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-repetitions-without-replacing-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add repetitions without replacing metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation_results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 3: Statistics and plots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optional steps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Optional steps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../regression_without_sirakaya/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Regression without Sirakaya estimates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-start-in-the-simulation-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Start in the simulation directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-python-script-to-run-simulation-run_policypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The python script to run simulation: run_policy.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The python script to run simulation: run_policy.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-smoke-test-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example smoke-test output
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-3-using-the-template-zsh-script-for-batch-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (Optional) 3. Using the template zsh script for batch run
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="(Optional) 3. Using the template zsh script for batch run">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction-to-the-template-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction to the template script
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#starting-the-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Starting the jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-the-job-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring the job status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#understand-the-result-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understand the result layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-repetitions-without-replacing-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add repetitions without replacing metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="step-2-run-the-policy-simulation">Step 2: Run the policy simulation<a class="headerlink" href="#step-2-run-the-policy-simulation" title="Permanent link">&para;</a></h1>
+<h2 id="1-start-in-the-simulation-directory">1. Start in the simulation directory<a class="headerlink" href="#1-start-in-the-simulation-directory" title="Permanent link">&para;</a></h2>
+<p>Change the working directory to simulation, and create a result directory to store your simulation statistics.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>./simulation
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>results
+</span></code></pre></div>
+<h2 id="2-the-python-script-to-run-simulation-run_policypy">2. The python script to run simulation: <code>run_policy.py</code><a class="headerlink" href="#2-the-python-script-to-run-simulation-run_policypy" title="Permanent link">&para;</a></h2>
+<p>The Python script for running the simulation is the following</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>-u<span class="w"> </span>run_policy.py<span class="w"> </span>-h
+</span></code></pre></div>
+<p>The general form is:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python -u run_policy.py [OPTIONS] POLICY_NAME REP OUTPUT_DIR
+</span></code></pre></div>
+<p>The three positional arguments are:</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POLICY_NAME</code></td>
+<td>Treatment-assignment policy. The help output lists every currently registered policy.</td>
+</tr>
+<tr>
+<td><code>REP</code></td>
+<td>Repetition number. The same integer is used as the random seed and output-directory name.</td>
+</tr>
+<tr>
+<td><code>OUTPUT_DIR</code></td>
+<td>Directory beneath which policy and repetition folders are created.</td>
+</tr>
+</tbody>
+</table>
+<p>One Python invocation always runs exactly one repetition. 
+The optional arguments are grouped in the help output. </p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Important options</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simulation horizon</td>
+<td><code>--T_max</code>, <code>--p_length</code>, <code>--p_freeze</code>, <code>--p_freeze_policy</code></td>
+</tr>
+<tr>
+<td>Population flow</td>
+<td><code>--beta_arrival</code>, <code>--beta_initial</code>, <code>--rel_off_probation</code></td>
+</tr>
+<tr>
+<td>Treatment</td>
+<td><code>--treatment_capacity</code>, <code>--treatment_effect</code>, <code>--treatment_dosage</code>, <code>--treatment_timing</code></td>
+</tr>
+<tr>
+<td>Limits</td>
+<td><code>--max_returns</code>, <code>--max_offenses</code></td>
+</tr>
+<tr>
+<td>Model switches</td>
+<td><code>--bool_return_can_be_treated</code>, <code>--bool_has_incarceration</code>, <code>--bool_keep_idiosyncratic_effect</code>, <code>--bool_mean_use_accumulated_offenses</code></td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td><code>--prison_rate_scaler</code>, <code>--length_scaler</code></td>
+</tr>
+<tr>
+<td>Output</td>
+<td><code>--verbosity</code></td>
+</tr>
+</tbody>
+</table>
+<p>You can pass <code>-h</code> to see details.
+Defaults are printed beside the options. Most of the arguments can be omitted in the input and defaults will be applied.</p>
+<h3 id="example-smoke-test-output">Example smoke-test output<a class="headerlink" href="#example-smoke-test-output" title="Permanent link">&para;</a></h3>
+<p>For example, we can run one repetition of the simulation, without any treatment policy by the following command,
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python<span class="w"> </span>-u<span class="w"> </span>run_policy.py<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--T_max<span class="w"> </span><span class="m">1000</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--p_length<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--prison_rate_scaler<span class="w"> </span><span class="m">0</span>.02<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--rel_off_probation<span class="w"> </span><span class="m">1000</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>--treatment_capacity<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>--treatment_effect<span class="w"> </span><span class="m">0</span>.6<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span>--bool_return_can_be_treated<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span>--bool_keep_idiosyncratic_effect<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span>null<span class="w"> </span><span class="m">0</span><span class="w"> </span>results/smoke
+</span></code></pre></div></p>
+<p>The console first confirms the effective configuration, then reports one row
+per episode. The console will report log including:</p>
+<ul>
+<li>header information and configurations</li>
+<li>summary of each episode</li>
+<li>data paths</li>
+</ul>
+<p>Most of the output should be self-explanatory. For example, the above command will output:</p>
+<blockquote>
+<p>header information and configurations</p>
+</blockquote>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Loading data from pickle cache...
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>============================================================================================================================================
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>SimulationSetup Summary
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>============================================================================================================================================
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  Mode:              FORMAL (DBG=0)
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>--------------------------------------------------------------------------------------------------------------------------------------------
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>Simulation Parameters:
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  T_max:             1,000 time units
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>  p_length:          100 (episode length)
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>  p_freeze:          2 (freeze period)
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>  p_freeze_policy:   10 (policy freeze period)
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>  off_prob:          1000 (off-probation term)
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>  n_episodes:        ~10
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>--------------------------------------------------------------------------------------------------------------------------------------------
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>Treatment Settings:
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>  capacity:          100 per episode
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>  effect:            Homogeneous treatment effect: input 0.6, translate to score as +log(0.6) = -0.5108256237659907
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>  dosage:            Homogeneous treatment dosage.
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>  max_returns:       25
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>  max_offenses:      25
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>  return_can_treat:  1
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>  has_incarceration: 1
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>  keep_idiosync:     1 (individual score_fixed)
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>  use_accum_stats:   1 (cumulative stats for community score)
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>  prison_scaler:     0.02 (scaler for prison rate)
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>  length_scaler:     1.0 (scaler for probation/off-probation length)
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>  qualifying:        bool_left == 0 &amp; stage == 'p'&amp; bool_can_be_treated == 1&amp; has_been_treated == 0&amp; bool_decision_made == 0
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>  current_enroll:    bool_left == 0 &amp; bool_treat == 1 &amp; stage == 'p'
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>--------------------------------------------------------------------------------------------------------------------------------------------
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>Population &amp; Arrivals:
+</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>  beta_arrival:      5 (arrival rate)
+</span><span id="__span-4-32"><a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>  beta_initial:      5 (initial population size)
+</span><span id="__span-4-33"><a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>  communities:       {1}
+</span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a>  initial pop:       5 individuals
+</span><span id="__span-4-35"><a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a>  available pool:    9374 individuals
+</span><span id="__span-4-36"><a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a>    age  weight  prison_rate  score_fixed  score_comm
+</span><span id="__span-4-37"><a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>0  55.0     1.0         0.12     0.857657   -2.078157
+</span><span id="__span-4-38"><a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a>1  45.0     1.0         0.12     0.323657   -2.078157
+</span><span id="__span-4-39"><a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a>2  55.0     1.0         0.12     0.244657   -2.078157
+</span><span id="__span-4-40"><a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a>3  18.0     1.0         0.12     1.279657   -2.078157
+</span><span id="__span-4-41"><a id="__codelineno-4-41" name="__codelineno-4-41" href="#__codelineno-4-41"></a>4  33.0     1.0         0.12     1.459657   -2.078157
+</span><span id="__span-4-42"><a id="__codelineno-4-42" name="__codelineno-4-42" href="#__codelineno-4-42"></a>--------------------------------------------------------------------------------------------------------------------------------------------
+</span><span id="__span-4-43"><a id="__codelineno-4-43" name="__codelineno-4-43" href="#__codelineno-4-43"></a>State Space:
+</span><span id="__span-4-44"><a id="__codelineno-4-44" name="__codelineno-4-44" href="#__codelineno-4-44"></a>  dimensions:        ['offenses', 'age_dist', 'has_been_treated', 'stage']
+</span><span id="__span-4-45"><a id="__codelineno-4-45" name="__codelineno-4-45" href="#__codelineno-4-45"></a>  n_states:          264
+</span><span id="__span-4-46"><a id="__codelineno-4-46" name="__codelineno-4-46" href="#__codelineno-4-46"></a>  state weights:     {'score_age_dist': '0.7452', 'score_offenses': '0.1089'}
+</span><span id="__span-4-47"><a id="__codelineno-4-47" name="__codelineno-4-47" href="#__codelineno-4-47"></a>  final weights:     {'score_fixed': '0.7452', 'score_comm': '0.7452', 'score_state': '1.0000', 'score_treatment': '1.0000'}
+</span><span id="__span-4-48"><a id="__codelineno-4-48" name="__codelineno-4-48" href="#__codelineno-4-48"></a>--------------------------------------------------------------------------------------------------------------------------------------------
+</span><span id="__span-4-49"><a id="__codelineno-4-49" name="__codelineno-4-49" href="#__codelineno-4-49"></a>Scoring Equation:
+</span><span id="__span-4-50"><a id="__codelineno-4-50" name="__codelineno-4-50" href="#__codelineno-4-50"></a>  score = score_fixed     × 0.7452
+</span><span id="__span-4-51"><a id="__codelineno-4-51" name="__codelineno-4-51" href="#__codelineno-4-51"></a>        + score_comm      × 0.7452
+</span><span id="__span-4-52"><a id="__codelineno-4-52" name="__codelineno-4-52" href="#__codelineno-4-52"></a>        + score_state     × 1.0000
+</span><span id="__span-4-53"><a id="__codelineno-4-53" name="__codelineno-4-53" href="#__codelineno-4-53"></a>        + score_treatment × 1.0000
+</span><span id="__span-4-54"><a id="__codelineno-4-54" name="__codelineno-4-54" href="#__codelineno-4-54"></a>
+</span><span id="__span-4-55"><a id="__codelineno-4-55" name="__codelineno-4-55" href="#__codelineno-4-55"></a>    where score_state = score_offenses × 0.1089
+</span><span id="__span-4-56"><a id="__codelineno-4-56" name="__codelineno-4-56" href="#__codelineno-4-56"></a>                      + score_age_dist × 0.7452
+</span><span id="__span-4-57"><a id="__codelineno-4-57" name="__codelineno-4-57" href="#__codelineno-4-57"></a>
+</span><span id="__span-4-58"><a id="__codelineno-4-58" name="__codelineno-4-58" href="#__codelineno-4-58"></a>          score_comm  = mean_re_time × (-0.003)
+</span><span id="__span-4-59"><a id="__codelineno-4-59" name="__codelineno-4-59" href="#__codelineno-4-59"></a>                      + percent_re   × 0.057
+</span><span id="__span-4-60"><a id="__codelineno-4-60" name="__codelineno-4-60" href="#__codelineno-4-60"></a>
+</span><span id="__span-4-61"><a id="__codelineno-4-61" name="__codelineno-4-61" href="#__codelineno-4-61"></a>  S(t | score) = S₀(t) ^ exp(score)
+</span></code></pre></div>
+<blockquote>
+<p>summary of an episode</p>
+</blockquote>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>--------------------------------------------------------------------------------------------------------------------------------------------
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>   episode  n_total  n_present_at_start  n_present_at_end  ep_n_offenses  ep_offense_time  ep_percent_re  ep_mean_re_time  cum_n_offenses  cum_offense_time  cum_percent_re  cum_mean_re_time  ep_n_incarcerations  cum_n_incarcerations  score_comm
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>2        3       64                  64                64            5.0       363.155406       0.109375        72.631081             9.0        722.084674        0.109375         80.231630                  0.0                   0.0   -0.234461
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>3        4       85                  85                85            5.0       866.770826       0.129412       173.354165            14.0       1588.855500        0.129412        113.489679                  0.0                   0.0   -0.333093
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>4        5      104                 104               104           16.0      3176.993312       0.230769       198.562082            30.0       4765.848812        0.230769        158.861627                  0.0                   0.0   -0.463431
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>5        6      125                 125               125           15.0      3874.901978       0.280000       258.326799            45.0       8640.750789        0.280000        192.016684                  0.0                   0.0   -0.560090
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>6        7      144                 144               144           20.0      4178.399315       0.340278       208.919966            65.0      12819.150105        0.340278        197.217694                  0.0                   0.0   -0.572257
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>current global measures: percent_re        0.340278
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>mean_re_time    197.217694
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>dtype: float64
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>[update_community_score] elapsed: 0.0026s
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>[update_state] elapsed: 0.0864s
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>[treatment_selection] elapsed: 0.0000s
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>episode 8/10 (t=800/1000)
+</span></code></pre></div>
+<blockquote>
+<p>output</p>
+</blockquote>
+<p>A successful run here will save <code>results/smoke/null/0/metrics.h5</code> plus the
+Excel summaries and log files.</p>
+<h2 id="optional-3-using-the-template-zsh-script-for-batch-run">(Optional) 3. Using the template zsh script for batch run<a class="headerlink" href="#optional-3-using-the-template-zsh-script-for-batch-run" title="Permanent link">&para;</a></h2>
+<p>The Python script supports exactly one repetition of the simulation with the corresponding parameters and selected repetition number.
+For convenience, it will be helpful to use it as a tool and call it by a batch script, so we can test <strong>different parameters</strong> 
+and <strong>automatically organize the simulation data by repetitions</strong>. Such a template script is provided under <code>./sbin</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It will be helpful to have a basic understanding of bash scripts. In the
+zsh file, you can edit the <code>policies</code>, <code>scale_factors</code>, <code>term_lengths</code>,
+<code>beta</code>, and <code>cap</code> assignments before generating commands when a different
+experiment is intended.</p>
+</div>
+<h3 id="introduction-to-the-template-script">Introduction to the template script<a class="headerlink" href="#introduction-to-the-template-script" title="Permanent link">&para;</a></h3>
+<div class="language-zsh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>zsh<span class="w"> </span>run_all_params-ofpl.zsh<span class="w"> </span>REPEAT<span class="w"> </span>START<span class="w"> </span>OUTPUT<span class="w"> </span>EFFECT<span class="w"> </span>ALLOW_RETURN<span class="w"> </span>IDIOSYNCRASY
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>REPEAT</code></td>
+<td>Number of repetitions to generate.</td>
+</tr>
+<tr>
+<td><code>START</code></td>
+<td>First repetition number and random seed.</td>
+</tr>
+<tr>
+<td><code>OUTPUT</code></td>
+<td>Root result directory. Avoid spaces in this path because the script does not quote every generated path.</td>
+</tr>
+<tr>
+<td><code>EFFECT</code></td>
+<td>Treatment effect accepted by <code>run_policy.py</code>, such as <code>0.71</code> or <code>type-1</code>. A numeric value must be positive.</td>
+</tr>
+<tr>
+<td><code>ALLOW_RETURN</code></td>
+<td><code>1</code> allows returning individuals to receive treatment; <code>0</code> does not.</td>
+</tr>
+<tr>
+<td><code>IDIOSYNCRASY</code></td>
+<td><code>1</code> retains individual fixed-risk scores; <code>0</code> replaces them with the population median.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, you will generate 5 repeations for each configuration under <code>results/</code> using the following command:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nv">OUTPUT</span><span class="o">=</span>results/result-ofpl-scl-0.6
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>zsh<span class="w"> </span>sbin/run_all_params-ofpl.zsh<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">"</span><span class="w"> </span><span class="m">0</span>.6<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1</span>
+</span></code></pre></div>
+<p>After running it, it outputs
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>usage:<span class="w"> </span>run_all_params-ofpl.zsh<span class="w"> </span>&lt;repetitions&gt;<span class="w"> </span>&lt;start&gt;<span class="w"> </span>&lt;output&gt;<span class="w"> </span>&lt;effect&gt;<span class="w"> </span>&lt;allowrtn&gt;<span class="w"> </span>&lt;idio&gt;
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w"> </span><span class="p">|</span>-<span class="w"> </span>repetitions:<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>repetitions
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w"> </span><span class="p">|</span>-<span class="w"> </span>start:<span class="w"> </span>first<span class="w"> </span>repetition<span class="w"> </span>number<span class="w"> </span>and<span class="w"> </span>random<span class="w"> </span>seed
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w"> </span><span class="p">|</span>-<span class="w"> </span>output:<span class="w"> </span>output<span class="w"> </span>directory
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w"> </span><span class="p">|</span>-<span class="w"> </span>effect:<span class="w"> </span>treatment<span class="w"> </span>effect
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w"> </span><span class="p">|</span>-<span class="w"> </span>allowrtn:<span class="w"> </span>whether<span class="w"> </span>to<span class="w"> </span>allow<span class="w"> </span>returning<span class="w"> </span>individuals<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>treated
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w"> </span><span class="p">|</span>-<span class="w"> </span>idio:<span class="w"> </span>whether<span class="w"> </span>to<span class="w"> </span>allow<span class="w"> </span>idiosyncrasies
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>Generating<span class="w"> </span>commands<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="m">5</span><span class="w"> </span>repetitions<span class="w"> </span><span class="c1"># 0 =&gt; 4</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">     </span>with<span class="w"> </span><span class="nv">effect</span><span class="o">=</span><span class="m">0</span>.6
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">     </span>and<span class="w"> </span><span class="nv">allowrtn</span><span class="o">=</span><span class="m">1</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">     </span>and<span class="w"> </span><span class="nv">idio</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>individuals
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>Commands<span class="w"> </span>generated<span class="w"> </span><span class="k">in</span><span class="w"> </span>cmd.sh.
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>see:<span class="w">  </span>results/result-ofpl-scl-0.6/cmd.sh
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>parallel<span class="w"> </span>run<span class="w"> </span>with:
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>cat<span class="w"> </span>results/result-ofpl-scl-0.6/cmd.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-I<span class="w"> </span><span class="o">{}</span><span class="w"> </span>-P<span class="w"> </span><span class="m">30</span><span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">"{}"</span><span class="w"> </span><span class="p">&amp;</span>
+</span></code></pre></div></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The zsh script will not direct start the Python processes, instead, it create the commands in a cmd file
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>results/$OUTPUT/cmd.sh
+</span></code></pre></div>
+in which, each line should call <code>python -u run_policy.py</code>, contain the intended
+parameters, end with one repetition number, and write to the intended
+<code>tl-&lt;term&gt;-sf-&lt;scale&gt;</code> directory.
+  Check the count and inspect several lines:
+  <div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>wc<span class="w"> </span>-l<span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">/cmd.sh"</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'1,5p'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">/cmd.sh"</span>
+</span></code></pre></div></p>
+</div>
+<h3 id="starting-the-jobs">Starting the jobs<a class="headerlink" href="#starting-the-jobs" title="Permanent link">&para;</a></h3>
+<p>You can directly run it line-by-line via
+  <div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>zsh<span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">/cmd.sh"</span>
+</span></code></pre></div>
+or, instead, use tools like <code>xargs</code> or <code>parallel</code> to run it in a concurrent mode.
+  For examples, run with 30 jobs in parallel using <code>xargs</code>:
+  <div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>cat<span class="w"> </span>results/result-ofpl-scl-0.6/cmd.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-I<span class="w"> </span><span class="o">{}</span><span class="w"> </span>-P<span class="w"> </span><span class="m">30</span><span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">"{}"</span><span class="w"> </span><span class="p">&amp;</span>
+</span></code></pre></div></p>
+<h3 id="monitoring-the-job-status">Monitoring the job status<a class="headerlink" href="#monitoring-the-job-status" title="Permanent link">&para;</a></h3>
+<p>In this specific example, you can watch one job log:</p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>tail<span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">/tl-1000-sf-0.02/logs/null_0_tl-1000-sf-0.02.log"</span>
+</span></code></pre></div>
+  Scan all logs for failures:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">"Traceback|Exception|Error"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">"</span><span class="w"> </span>-g<span class="w"> </span><span class="s1">'*.log'</span>
+</span></code></pre></div>
+<h3 id="understand-the-result-layout">Understand the result layout<a class="headerlink" href="#understand-the-result-layout" title="Permanent link">&para;</a></h3>
+<p>Each completed repetition automatically produces <code>metrics.h5</code> together with
+Excel summaries and a log. <code>metrics.h5</code> is the simulation output consumed in
+Step 3; no separate conversion command is needed.</p>
+<p>A successful run (as we used above) will generate a directory with the files as follows:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>results/
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>└── result-ofpl-scl-0.6/
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    ├── cmd.sh
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    └── tl-1000-sf-0.02/
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>        ├── logs/
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>        │   └── null_0_tl-1000-sf-0.02.log
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>        ├── null/
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>        │   └── 0/
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>        │       ├── metrics.h5
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>        │       ├── dfi.xlsx
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>        │       ├── df_episode_stats.xlsx
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>        │       ├── df_result_last.xlsx
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>        │       └── log.txt
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>        ├── high-risk/
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>        ├── low-risk/
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>        └── age-first/
+</span></code></pre></div>
+<p>The files have different purposes:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>metrics.h5</code></td>
+<td>Per-episode metrics consumed by the sensitivity-analysis code. This is the essential analysis input.</td>
+</tr>
+<tr>
+<td><code>dfi.xlsx</code></td>
+<td>Final individual-level simulator state.</td>
+</tr>
+<tr>
+<td><code>df_episode_stats.xlsx</code></td>
+<td>Episode-level simulator statistics.</td>
+</tr>
+<tr>
+<td><code>df_result_last.xlsx</code></td>
+<td>State-level summary for the final episode.</td>
+</tr>
+<tr>
+<td><code>log.txt</code></td>
+<td>Simulator log for one repetition.</td>
+</tr>
+<tr>
+<td><code>logs/*.log</code></td>
+<td>Captured stdout and stderr for each generated command.</td>
+</tr>
+<tr>
+<td><code>cmd.sh</code></td>
+<td>Exact commands for the sweep; retain this as the experiment manifest.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="add-repetitions-without-replacing-metrics">Add repetitions without replacing metrics<a class="headerlink" href="#add-repetitions-without-replacing-metrics" title="Permanent link">&para;</a></h3>
+<p>As you may find 5 repetitions insufficient, you can append repetitions <code>5</code> through <code>9</code> to an existing five-repetition result:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>zsh<span class="w"> </span>sbin/run_all_params-ofpl.zsh<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">"</span><span class="w"> </span><span class="m">0</span>.6<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>xargs<span class="w"> </span>-I<span class="w"> </span><span class="o">{}</span><span class="w"> </span>-P<span class="w"> </span><span class="m">4</span><span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">"{}"</span><span class="w"> </span>&lt;<span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">/cmd.sh"</span>
+</span></code></pre></div>
+<p>The generator preserves existing policy/repetition result directories, but it
+replaces <code>cmd.sh</code> and removes existing command-log directories. Save the old
+<code>cmd.sh</code> and logs first if they are part of the experiment record.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../js/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

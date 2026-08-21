@@ -1,0 +1,939 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Regression, simulation, and analysis workflow for the Python discrete-event simulator.">
+      
+      
+      
+      
+        <link rel="prev" href="../simulation_run/">
+      
+      
+        <link rel="next" href="../regression_without_sirakaya/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Step 3: Statistics and plots - Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#step-3-collect-statistics-and-generate-plots" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Code for &#34;The Dynamic and Endogenous Behavior of Re-Offense Risk...&#34;" class="md-header__button md-logo" aria-label="Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Step 3: Statistics and plots
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Code for &#34;The Dynamic and Endogenous Behavior of Re-Offense Risk...&#34;" class="md-nav__button md-logo" aria-label="Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Code for "The Dynamic and Endogenous Behavior of Re-Offense Risk..."
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Workflow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation_regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 1: Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation_run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 2: Simulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 3: Statistics and plots
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 3: Statistics and plots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-start-in-the-simulation-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Start in the simulation directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-verify-the-hdf5-results-produced-in-step-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Verify the HDF5 results produced in Step 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-review-the-analysis-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Review the analysis configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-run-the-analysis-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Run the analysis driver
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-understand-the-generated-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Understand the generated outputs
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optional steps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Optional steps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../regression_without_sirakaya/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Regression without Sirakaya estimates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-start-in-the-simulation-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Start in the simulation directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-verify-the-hdf5-results-produced-in-step-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Verify the HDF5 results produced in Step 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-review-the-analysis-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Review the analysis configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-run-the-analysis-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Run the analysis driver
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-understand-the-generated-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Understand the generated outputs
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="step-3-collect-statistics-and-generate-plots">Step 3: Collect statistics and generate plots<a class="headerlink" href="#step-3-collect-statistics-and-generate-plots" title="Permanent link">&para;</a></h1>
+<p>The statistics workflow uses three layers:</p>
+<ol>
+<li><code>simulation_summary.py</code> reads each repetition's <code>metrics.h5</code> file;</li>
+<li><code>simulation_sensanaly.py</code> supplies shared windowing and plotting utilities;</li>
+<li><code>sensanaly/run_sensanaly_prscale.py</code> is the runnable driver for the
+   off-probation-length and prison-scale experiment.</li>
+</ol>
+<p>Run the driver rather than <code>simulation_sensanaly.py</code> directly. The latter only
+defines helper functions and has no command-line entry point.</p>
+<h2 id="1-start-in-the-simulation-directory">1. Start in the simulation directory<a class="headerlink" href="#1-start-in-the-simulation-directory" title="Permanent link">&para;</a></h2>
+<p>Again, let us use the output directory defined in <a href="../simulation_run/">Step 2</a></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>./simulation
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">OUTPUT</span><span class="o">=</span>results/result-ofpl-scl-0.6
+</span></code></pre></div>
+<p>The module imports assume this working directory.</p>
+<h2 id="2-verify-the-hdf5-results-produced-in-step-2">2. Verify the HDF5 results produced in Step 2<a class="headerlink" href="#2-verify-the-hdf5-results-produced-in-step-2" title="Permanent link">&para;</a></h2>
+<p>Each completed <code>run_policy.py</code> repetition from Step 2 automatically produces
+one HDF5 file in a directory named exactly like:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$OUTPUT/tl-&lt;term_length&gt;-sf-&lt;scale_factor&gt;/&lt;policy&gt;/&lt;repetition&gt;/metrics.h5
+</span></code></pre></div>
+<p>Check the files before starting the analysis:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>find<span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">"</span><span class="w"> </span>-name<span class="w"> </span>metrics.h5<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'1,20p'</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>find<span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">"</span><span class="w"> </span>-name<span class="w"> </span>metrics.h5<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</span></code></pre></div>
+<p>Use canonical numeric directory names such as <code>sf-0.7</code>. The parser converts
+the directory component to a float and later reconstructs the name; a spelling
+such as <code>sf-0.70</code> may therefore fail to reload.</p>
+<p>The input to Step 3 is the <code>$OUTPUT</code> directory created under <code>results/</code> by Step
+2, including all of its
+<code>tl-...-sf-.../&lt;policy&gt;/&lt;repetition&gt;/metrics.h5</code> files.</p>
+<p>Stop here if the HDF5 count is smaller than the expected number of simulation
+commands or if any file is empty. Return to Step 2, inspect the corresponding
+job logs, and rerun the failed commands. Analysis should begin only after the
+raw result matrix is complete.</p>
+<h2 id="3-review-the-analysis-configuration">3. Review the analysis configuration<a class="headerlink" href="#3-review-the-analysis-configuration" title="Permanent link">&para;</a></h2>
+<p>Open <code>sensanaly/run_sensanaly_prscale.py</code> and confirm its configuration before
+running. For example, </p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Current value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Policies</td>
+<td><code>null</code>, <code>high-risk</code>, <code>low-risk</code>, <code>age-first</code></td>
+</tr>
+<tr>
+<td>Equilibrium window</td>
+<td>Last <code>20</code> episodes, used as equilibrium statistics</td>
+</tr>
+<tr>
+<td>Early window</td>
+<td><code>40</code> episodes starting at episode index <code>40</code></td>
+</tr>
+<tr>
+<td>Metrics</td>
+<td>Offense rate, offenses per capita, incarceration rate, population, offenses, departures</td>
+</tr>
+</tbody>
+</table>
+<p>Despite the output directory name <code>first</code>, the current early window is
+episodes <code>40</code> through <code>79</code>, not episodes <code>0</code> through <code>39</code>. Set
+<code>summary_wd_start = 0</code> if the first episodes are intended.</p>
+<p>The configured metrics are:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>offense_rate
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>offense_per_capita
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>incarceration_rate
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>total_population
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>total_offenses
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>total_departures
+</span></code></pre></div>
+<p>For ordinary metrics, the code sums each repetition over the selected window
+and divides by the window length, giving a per-episode average. </p>
+<h2 id="4-run-the-analysis-driver">4. Run the analysis driver<a class="headerlink" href="#4-run-the-analysis-driver" title="Permanent link">&para;</a></h2>
+<p>Because the driver uses a relative package import, run it as a module:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>-m<span class="w"> </span>sensanaly.run_sensanaly_prscale<span class="w"> </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">"</span>
+</span></code></pre></div>
+<p>Do not use <code>python sensanaly/run_sensanaly_prscale.py</code>; that invocation can
+fail because its relative import has no package context.</p>
+<p>The driver automatically scans all <code>tl-...-sf-...</code> directories, loads every
+numeric repetition directory containing <code>metrics.h5</code>, aggregates the requested
+policies, writes CSV files, and creates both absolute and null-relative plots.</p>
+<h2 id="5-understand-the-generated-outputs">5. Understand the generated outputs<a class="headerlink" href="#5-understand-the-generated-outputs" title="Permanent link">&para;</a></h2>
+<p>The driver writes:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$OUTPUT/sensitivity_analysis/
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>├── equilibrium/
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>│   ├── sensitivity_offense_rate.csv
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>│   ├── offense_rate_term_length_1000.png
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│   ├── offense_rate_term_length_1000.pgf
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>│   ├── offense_rate_term_length_1000_rel_null.png
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>│   └── offense_rate_term_length_1000_rel_null.pgf
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>└── first/
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    └── ...
+</span></code></pre></div>
+<p>Each CSV row is indexed by <code>term_length</code>, <code>scale_factor</code>, and <code>policy</code>, with:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mean</code></td>
+<td>Mean across repetitions after applying the selected episode window.</td>
+</tr>
+<tr>
+<td><code>std</code></td>
+<td>Standard deviation across repetitions.</td>
+</tr>
+<tr>
+<td><code>n_reps</code></td>
+<td>Number of successfully loaded repetitions.</td>
+</tr>
+<tr>
+<td><code>enrollment_mean</code></td>
+<td>Mean treatment enrollment per episode over the same window.</td>
+</tr>
+<tr>
+<td><code>enrollment_std</code></td>
+<td>Standard deviation of enrollment across repetitions.</td>
+</tr>
+</tbody>
+</table>
+<p>Inspect the CSV before trusting the plots:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'1,20p'</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">/sensitivity_analysis/equilibrium/sensitivity_offense_rate.csv"</span>
+</span></code></pre></div>
+<p>Confirm that every intended parameter-policy combination appears and that
+<code>n_reps</code> is constant across rows.</p>
+<h1 id="optimals-tips">(Optimals) Tips<a class="headerlink" href="#optimals-tips" title="Permanent link">&para;</a></h1>
+<h2 id="keep-all-experiment-families-under-results">Keep all experiment families under <code>results/</code><a class="headerlink" href="#keep-all-experiment-families-under-results" title="Permanent link">&para;</a></h2>
+<p>Use <code>results/</code> as the common root for raw simulation output and generated
+analysis. Different treatment-effect specifications get separate experiment
+directories:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>results/
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>├── result-ofpl-scl-0.6/
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>├── result-ofpl-scl-0.71/
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>├── result-ofpl-scl-0.71-hete/
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>├── result-ofpl-scl-0.9/
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>├── result-ofpl-scl-type1+/
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>└── result-ofpl-scl-type1++/
+</span></code></pre></div>
+<p>Within each family, keep the <code>tl-...-sf-...</code> raw simulation directories and the
+generated <code>sensitivity_analysis/equilibrium</code> and
+<code>sensitivity_analysis/first</code> directories together.</p>
+<p>For a fully reproducible record, retain:</p>
+<ul>
+<li>the complete <code>tl-...-sf-...</code> raw result directories;</li>
+<li>every repetition's <code>metrics.h5</code>;</li>
+<li>the <code>cmd.sh</code> used for the run;</li>
+<li>command logs;</li>
+<li>the code revision, input-data version, and Python environment;</li>
+<li>a copy of the analysis configuration.</li>
+</ul>
+<p>If the raw result tree is moved to separate storage after analysis, put a text
+manifest in the compact archive recording its location, directory layout, and
+checksum.</p>
+<h2 id="optional-comparisons-across-experiment-families">Optional comparisons across experiment families<a class="headerlink" href="#optional-comparisons-across-experiment-families" title="Permanent link">&para;</a></h2>
+<p><code>compare_sensitivity.py</code> compares already-generated sensitivity CSVs across
+multiple result folders. Its folder list and base directory are configured in
+the source file, so review those values before running it. It is a downstream
+comparison step and does not replace the <code>run_sensanaly_prscale</code> driver.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../js/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
