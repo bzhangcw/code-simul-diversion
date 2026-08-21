@@ -113,26 +113,26 @@ Population & Arrivals:
   initial pop:       5 individuals
   available pool:    9374 individuals
     age  weight  prison_rate  score_fixed  score_comm
-0  55.0     1.0         0.12     0.857657   -2.078157
-1  45.0     1.0         0.12     0.323657   -2.078157
-2  55.0     1.0         0.12     0.244657   -2.078157
-3  18.0     1.0         0.12     1.279657   -2.078157
-4  33.0     1.0         0.12     1.459657   -2.078157
+0  55.0     1.0         0.12        0.861   -2.078157
+1  45.0     1.0         0.12        0.327   -2.078157
+2  55.0     1.0         0.12        0.248   -2.078157
+3  18.0     1.0         0.12        1.283   -2.078157
+4  33.0     1.0         0.12        1.463   -2.078157
 --------------------------------------------------------------------------------------------------------------------------------------------
 State Space:
   dimensions:        ['offenses', 'age_dist', 'has_been_treated', 'stage']
   n_states:          264
-  state weights:     {'score_age_dist': '0.7452', 'score_offenses': '0.1089'}
-  final weights:     {'score_fixed': '0.7452', 'score_comm': '0.7452', 'score_state': '1.0000', 'score_treatment': '1.0000'}
+  state weights:     {'score_age_dist': '0.7904', 'score_offenses': '0.1884'}
+  final weights:     {'score_fixed': '0.7904', 'score_comm': '0.7904', 'score_state': '1.0000', 'score_treatment': '1.0000'}
 --------------------------------------------------------------------------------------------------------------------------------------------
 Scoring Equation:
-  score = score_fixed     × 0.7452
-        + score_comm      × 0.7452
+  score = score_fixed     × 0.7904
+        + score_comm      × 0.7904
         + score_state     × 1.0000
         + score_treatment × 1.0000
 
-    where score_state = score_offenses × 0.1089
-                      + score_age_dist × 0.7452
+    where score_state = score_offenses × 0.1884
+                      + score_age_dist × 0.7904
 
           score_comm  = mean_re_time × (-0.003)
                       + percent_re   × 0.057
