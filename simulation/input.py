@@ -9,6 +9,12 @@ from simulation import Event
 
 # Cache directory for pickle files
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "bin")
+CACHE_FILENAMES = {
+    "dfr": "dfr.pkl",
+    "df": "df.pkl",
+    "df_individual": "df_individual.pkl",
+    "df_community": "df_community.pkl",
+}
 
 cols_attrs = [
     "sex",
@@ -45,6 +51,8 @@ cols_fill_1 = [
     "observed",
     "age_dist",
     "education",
+    # Arrests during the observed probation period. The workbook keeps the
+    # broader count separately as felony_arrest_all.
     "felony_arrest",
     "sex",
     "race",
@@ -55,6 +63,26 @@ cols_fill_1 = [
     "supervision_level",
     "supervision",
 ]
+
+
+def _cache_files():
+    """Return the known cache names and their absolute paths."""
+    return {
+        name: os.path.join(CACHE_DIR, filename)
+        for name, filename in CACHE_FILENAMES.items()
+    }
+
+
+def clear_cached():
+    """Delete the prepared-data pickle caches and return the removed paths."""
+    removed = []
+    for path in _cache_files().values():
+        try:
+            os.remove(path)
+        except FileNotFoundError:
+            continue
+        removed.append(path)
+    return removed
 
 
 def load_data(datadir="./", use_cache=True):
@@ -68,13 +96,7 @@ def load_data(datadir="./", use_cache=True):
     Returns:
         Tuple of (dfr, df, df_individual, df_community)
     """
-    # Define cache file paths
-    cache_files = {
-        "dfr": os.path.join(CACHE_DIR, "dfr.pkl"),
-        "df": os.path.join(CACHE_DIR, "df.pkl"),
-        "df_individual": os.path.join(CACHE_DIR, "df_individual.pkl"),
-        "df_community": os.path.join(CACHE_DIR, "df_community.pkl"),
-    }
+    cache_files = _cache_files()
 
     # Check if all cache files exist
     all_cached = use_cache and all(os.path.exists(f) for f in cache_files.values())
@@ -148,6 +170,8 @@ def load_data(datadir="./", use_cache=True):
     df_individual = df.assign(
         rel_pstart=lambda df: df["pstart"] - min_pstart,
         rel_probation=lambda df: df["probation_term"] * 30,
+        # Initial offenses use arrests during the observed probation period,
+        # not the broader felony_arrest_all field.
         offenses=lambda df: df["felony_arrest"].apply(np.round),
     )[
         [

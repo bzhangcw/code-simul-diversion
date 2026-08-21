@@ -22,8 +22,8 @@ metrics = [
     "total_population",
     "total_offenses",
     "total_departures",
-    "total_offenses/total_population",
-    "total_departures/total_population",
+    # "total_offenses/total_population", # debug only.
+    # "total_departures/total_population",
 ]
 policies = [
     "null",
@@ -34,7 +34,7 @@ policies = [
     # "high-risk-young-first",
 ]
 summary_wd_last = 20  # Window size for computing equilibrium (last N periods)
-summary_wd_first = 40  # Window size for computing first N periods
+summary_wd_first = 30  # Window size for computing first N periods
 summary_wd_start = 40
 
 print("=" * 60)

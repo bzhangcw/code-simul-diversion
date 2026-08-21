@@ -165,11 +165,11 @@ A successful run here will save `results/smoke/null/0/metrics.h5` plus the
 Excel summaries and log files.
 
 
-## (Optional) 3. Using the zsh script to run the simulation
+## (Optional) 3. Using the template zsh script for batch run
 
 The Python script supports exactly one repetition of the simulation with the corresponding parameters and selected repetition number.
-For convenience, it will be helpful to use it as a tool and call it by a batch script, so we can test different parameters 
-and automatically organize the simulation data across multiple repetitions. Such a script is provided under `./sbin`.
+For convenience, it will be helpful to use it as a tool and call it by a batch script, so we can test **different parameters** 
+and **automatically organize the simulation data by repetitions**. Such a template script is provided under `./sbin`.
 
 !!! note
     It will be helpful to have a basic understanding of bash scripts. In the
@@ -198,7 +198,7 @@ OUTPUT=results/result-ofpl-scl-0.6
 zsh sbin/run_all_params-ofpl.zsh 5 0 "$OUTPUT" 0.6 1 1
 ```
 
-- After running it, it outputs
+After running it, it outputs
 ```bash
 usage: run_all_params-ofpl.zsh <repetitions> <start> <output> <effect> <allowrtn> <idio>
  |- repetitions: number of repetitions
@@ -218,25 +218,26 @@ parallel run with:
 cat results/result-ofpl-scl-0.6/cmd.sh | xargs -I {} -P 30 bash -c "{}" &
 ```
 
-- The zsh script will not direct start the Python processes, instead, it create the commands in a cmd file
-```
-results/$OUTPUT/cmd.sh
-```
-in which, each line should call `python -u run_policy.py`, contain the intended
-parameters, end with one repetition number, and write to the intended
-`tl-<term>-sf-<scale>` directory.
-  Check the count and inspect several lines:
-  ```bash
-  wc -l "$OUTPUT/cmd.sh"
-  sed -n '1,5p' "$OUTPUT/cmd.sh"
-  ```
+!!! note 
+    The zsh script will not direct start the Python processes, instead, it create the commands in a cmd file
+    ```
+    results/$OUTPUT/cmd.sh
+    ```
+    in which, each line should call `python -u run_policy.py`, contain the intended
+    parameters, end with one repetition number, and write to the intended
+    `tl-<term>-sf-<scale>` directory.
+      Check the count and inspect several lines:
+      ```bash
+      wc -l "$OUTPUT/cmd.sh"
+      sed -n '1,5p' "$OUTPUT/cmd.sh"
+      ```
 
-- You can directly run it line-by-line via
+### Starting the jobs
+You can directly run it line-by-line via
   ```bash
   zsh "$OUTPUT/cmd.sh"
   ```
-
-- or, instead, use tools like `xargs` or `parallel` to run it in a concurrent mode.
+or, instead, use tools like `xargs` or `parallel` to run it in a concurrent mode.
   For examples, run with 30 jobs in parallel using `xargs`:
   ```bash
   cat results/result-ofpl-scl-0.6/cmd.sh | xargs -I {} -P 30 bash -c "{}" &
@@ -254,29 +255,14 @@ In this specific example, you can watch one job log:
   rg -n "Traceback|Exception|Error" "$OUTPUT" -g '*.log'
   ```
 
-Count completed repetitions by counting their metric files:
 
-```bash
-find "$OUTPUT" -name metrics.h5 -type f | wc -l
-```
-
-For a complete balanced sweep, that count should equal:
-
-```bash
-number of repetitions x number of scale factors x number of term lengths x number of policies
-```
-
-If only some jobs fail, rerun their individual lines from `cmd.sh`. Reusing the
-same policy, parameter directory, and repetition number overwrites that
-repetition's output files.
-
-## 9. Understand the result layout
+### Understand the result layout
 
 Each completed repetition automatically produces `metrics.h5` together with
 Excel summaries and a log. `metrics.h5` is the simulation output consumed in
 Step 3; no separate conversion command is needed.
 
-A successful sweep has this structure:
+A successful run (as we used above) will generate a directory with the files as follows:
 
 ```text
 results/
@@ -309,9 +295,9 @@ The files have different purposes:
 | `logs/*.log` | Captured stdout and stderr for each generated command. |
 | `cmd.sh` | Exact commands for the sweep; retain this as the experiment manifest. |
 
-## 10. Add repetitions without replacing metrics
+### Add repetitions without replacing metrics
 
-To append repetitions `5` through `9` to an existing five-repetition result:
+As you may find 5 repetitions insufficient, you can append repetitions `5` through `9` to an existing five-repetition result:
 
 ```bash
 zsh sbin/run_all_params-ofpl.zsh 5 5 "$OUTPUT" 0.6 1 1
@@ -321,3 +307,4 @@ xargs -I {} -P 4 bash -c "{}" < "$OUTPUT/cmd.sh"
 The generator preserves existing policy/repetition result directories, but it
 replaces `cmd.sh` and removes existing command-log directories. Save the old
 `cmd.sh` and logs first if they are part of the experiment record.
+

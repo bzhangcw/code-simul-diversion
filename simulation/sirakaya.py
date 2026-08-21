@@ -66,9 +66,9 @@ _SCORE_SUPERVISION_VALS = [0.0, 0.220, -0.172, 0.238, 0.586, 0.697]
 
 # Group (II) community-level coefficients (continuous percentages).
 # Source: tab.sirakaya.coeffs in the journal manuscript (Sirakaya 2003 estimates).
-_SCORE_HOUSE_FEMALE_COEF = -0.034  # Female-head household (% of households)
-_SCORE_PROPERTY_TAX_COEF = 0.012  # Property taxes (% of income)
-
+# _SCORE_HOUSE_FEMALE_COEF = -0.034  # Female-head household (% of households)
+# _SCORE_PROPERTY_TAX_COEF = 0.0012  # Property taxes (% of income)
+_SCORE_HOUSE_FEMALE_COEF = _SCORE_PROPERTY_TAX_COEF = 0.0
 
 # ------------------------------------------------------------------------------
 # age updates

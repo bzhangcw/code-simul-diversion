@@ -1,8 +1,8 @@
 # Regression without Sirakaya's estimates
 
 This optional workflow re-estimates the proportional-hazards model directly
-from the imputed covariates. It corresponds to the **Fit the Cox model from
-scratch** section of `./simulation/py-sirakaya-fitting.ipynb`.
+from the imputed covariates. The complete executable notebook is
+`./simulation/py-sirakaya-fitting-from-scratch.ipynb`.
 
 The fit does not use the hard-coded coefficient arrays in `sirakaya.py`, the
 precomputed `score_fixed`, `score_comm`, `score_age_dist`, `offset`, or
@@ -21,11 +21,10 @@ virtual environment, and start Jupyter from `./simulation/`:
 ```bash
 source ./.venv/bin/activate
 cd ./simulation
-python -m jupyter lab py-sirakaya-fitting.ipynb
+python -m jupyter lab py-sirakaya-fitting-from-scratch.ipynb
 ```
 
-Run the cells below in a new notebook or replace the notebook's from-scratch
-Cox section with them.
+The notebook contains the same cells shown below.
 
 ## 2. Cell 1 — imports and output directory
 
@@ -71,6 +70,10 @@ display(county_statistics.head())
 Although `input.load_data()` also constructs score columns for the standard
 simulation workflow, none of those columns enter the model below.
 
+In the input workbook, `felony_arrest` means arrests during the observed
+probation period. The broader `felony_arrest_all` count remains available in
+the imputed table but is not used in this specification.
+
 ## 4. Cell 3 — assemble the modeling frame
 
 Each categorical variable is rounded after imputation, restricted to its
@@ -108,7 +111,7 @@ model_columns = (
 )
 cox_data = cox_data[model_columns].dropna().copy()
 
-# Cumulative felony arrests, added independently of the published score.
+# Felony arrests during the observed probation period.
 cox_data["offenses"] = cox_data["felony_arrest"].round()
 cox_data["time"] = cox_data["time"].clip(lower=1.0)
 cox_data["observed"] = (cox_data["observed"] > 0).astype(int)

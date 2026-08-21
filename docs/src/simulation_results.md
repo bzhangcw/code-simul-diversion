@@ -12,6 +12,8 @@ defines helper functions and has no command-line entry point.
 
 ## 1. Start in the simulation directory
 
+Again, let us use the output directory defined in [Step 2](simulation_run.md)
+
 ```bash
 cd ./simulation
 OUTPUT=results/result-ofpl-scl-0.6
@@ -51,14 +53,14 @@ raw result matrix is complete.
 ## 3. Review the analysis configuration
 
 Open `sensanaly/run_sensanaly_prscale.py` and confirm its configuration before
-running. Its current defaults are:
+running. For example, 
 
 | Setting | Current value |
 | --- | --- |
 | Policies | `null`, `high-risk`, `low-risk`, `age-first` |
-| Equilibrium window | Last `20` episodes |
+| Equilibrium window | Last `20` episodes, used as equilibrium statistics |
 | Early window | `40` episodes starting at episode index `40` |
-| Metrics | Offense rate, offenses per capita, incarceration rate, population, offenses, departures, and two count ratios |
+| Metrics | Offense rate, offenses per capita, incarceration rate, population, offenses, departures |
 
 Despite the output directory name `first`, the current early window is
 episodes `40` through `79`, not episodes `0` through `39`. Set
@@ -73,14 +75,10 @@ incarceration_rate
 total_population
 total_offenses
 total_departures
-total_offenses/total_population
-total_departures/total_population
 ```
 
 For ordinary metrics, the code sums each repetition over the selected window
-and divides by the window length, giving a per-episode average. For metrics
-written as `numerator/denominator`, it divides the two window sums and does not
-divide by the window length again.
+and divides by the window length, giving a per-episode average. 
 
 ## 4. Run the analysis driver
 
@@ -133,26 +131,9 @@ sed -n '1,20p' \
 Confirm that every intended parameter-policy combination appears and that
 `n_reps` is constant across rows.
 
-## 6. Interpret the figures correctly
+# (Optimals) Tips
 
-For the prison-scale plots:
-
-- one line is drawn per policy;
-- the shaded region is `mean +/- std` across repetitions;
-- an absolute plot shows the aggregated metric;
-- a `_rel_null` plot shows `policy mean - null mean`, not a ratio or percentage
-  change;
-- the current driver passes `scale=0.12`, so the plotted x-value is the stored
-  prison-rate scale factor multiplied by `0.12`.
-
-The relative plot subtracts the null mean but retains each policy's own
-standard-deviation band. It is not a paired-difference confidence interval.
-
-PNG output works headlessly. The code also always writes PGF files, which may
-require a working LaTeX installation. If PGF generation fails after PNG files
-are written, inspect the LaTeX error and environment before rerunning.
-
-## 7. Keep all experiment families under `results/`
+## Keep all experiment families under `results/`
 
 Use `results/` as the common root for raw simulation output and generated
 analysis. Different treatment-effect specifications get separate experiment
@@ -185,7 +166,7 @@ If the raw result tree is moved to separate storage after analysis, put a text
 manifest in the compact archive recording its location, directory layout, and
 checksum.
 
-## 8. Optional comparisons across experiment families
+## Optional comparisons across experiment families
 
 `compare_sensitivity.py` compares already-generated sensitivity CSVs across
 multiple result folders. Its folder list and base directory are configured in

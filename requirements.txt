@@ -1,0 +1,3 @@
+# Install the simulation, notebook, and documentation dependencies together.
+-r simulation/requirements.txt
+-r docs/requirements.txt
